@@ -1,1 +1,1 @@
-# gpu_test
+# mi250x_test
