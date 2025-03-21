@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Arithmetic Intensity: " << static_cast<float>(flops) / (8 * (n + numThreads)) << std::endl;
     std::cout << "Average runtime: " << avg_runtime << " ms" << std::endl;
     std::cout << "Average runtime: " << avg_runtime_seconds << " secs" << std::endl;
-    std::cout << "TFLOPS/sec: " << tflops / runtime_seconds << std::endl;
+    std::cout << "TFLOPS/sec: " << tflops / avg_runtime_seconds << std::endl;
 
     hipFree(mem_a);
 
