@@ -9,10 +9,6 @@
 #ifndef ITER
 #endif
 
-#ifndef EXP
-#endif
-
-
 
 template<typename T, int iter>
 __global__ void vectorAdd(T *buf, const uint64_t n) {
@@ -39,8 +35,7 @@ __global__ void vectorAdd(T *buf, const uint64_t n) {
     ptr[0] = -x;
 }
 
-template<int numExperiments>
-float getPerf(const uint64_t n, int blockSize, int gridSize, int numThreads, void *mem_a, float time) {
+float getPerf(const uint64_t n, const int numExperiments, int blockSize, int gridSize, int numThreads, void *mem_a, float time) {
     hipEvent_t start, stop;
     hipEventCreate(&start);
     hipEventCreate(&stop);
@@ -62,8 +57,10 @@ float getPerf(const uint64_t n, int blockSize, int gridSize, int numThreads, voi
 
 int main(int argc, char* argv[]) {
     const uint64_t n = std::stoll(argv[1]);
+    const uint64_t n_experiments = std::stoll(argv[2]);
 
     std::cout << "Vector length: " << n << std::endl;
+    std::cout << "N experiments: " << n_experiments << std::endl;
 
     void *mem_a;
     hipMalloc(&mem_a, n * sizeof(double));
@@ -82,15 +79,15 @@ int main(int argc, char* argv[]) {
     std::cout << "Expected number of FP64 Flops: " << flops << std::endl << std::endl;
 
     float *runtimes;
-    runtimes = (float *)malloc(EXP * sizeof(float));
+    runtimes = (float *)malloc(n_experiments * sizeof(float));
     float time;
     hipLaunchKernelGGL((vectorAdd<double, ITER>), dim3(gridSize), dim3(blockSize), 0, 0, (double *)mem_a, n);
     hipDeviceSynchronize();
-    time = getPerf<EXP>(n, blockSize, gridSize, numThreads, mem_a, time);
+    time = getPerf(n, n_experiments, blockSize, gridSize, numThreads, mem_a, time);
     
     std::cout << std::endl;
 
-    float avg_runtime = time / EXP;
+    float avg_runtime = time / n_experiments;
     std::cout << "Average runtime: " << avg_runtime << " ms" << std::endl;
     
     std::string filename;
