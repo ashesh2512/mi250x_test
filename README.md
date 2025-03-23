@@ -10,6 +10,6 @@ Just type `make`
 
 After building just run `./launch.sh`
 
-This will launch two instances of the benchmark each one targeting one of the two GCDs on a MI250X GPU
+This will launch two instances of the benchmark, each one targeting one of the two GCDs on a MI250X GPU
 
 To increase or decrease the run time, jut change the `n_experiments` variable in the `run.sh` script.
