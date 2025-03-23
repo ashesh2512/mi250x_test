@@ -1,6 +1,6 @@
 # mi250x_test
 
-Simple benchmark that pushes pulls close to peak bandwidth and peak compute on MI250X 
+Simple benchmark that achieves close to peak bandwidth and peak compute on MI250X 
 
 ## Build
 
