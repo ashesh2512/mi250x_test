@@ -70,6 +70,7 @@ int main(int argc, char* argv[]) {
     int gridSize = 228 * 128 * factor;
     int numThreads = gridSize * blockSize;
     uint64_t flops = n * ITER * 2;
+    uint64_t data_moved = (n + numThreads) * sizeof(double);
 
     std::cout << "Number of iterations: " << ITER << std::endl;
     std::cout << "Grid size: " << gridSize << std::endl;
@@ -87,17 +88,17 @@ int main(int argc, char* argv[]) {
     
     std::cout << std::endl;
 
-    float avg_runtime = time / n_experiments;
-    std::cout << "Average runtime: " << avg_runtime << " ms" << std::endl;
-    
-    std::string filename;
+    float avg_runtime = time / n_experiments;    
     float avg_runtime_seconds = avg_runtime / 1000;
     double tflops = static_cast<double>(flops) / 1e12;
 
-    std::cout << "Arithmetic Intensity: " << static_cast<float>(flops) / (8 * (n + numThreads)) << std::endl;
+    std::cout << "Total runtime: " << time / 1000 << " secs" << std::endl;
     std::cout << "Average runtime: " << avg_runtime << " ms" << std::endl;
     std::cout << "Average runtime: " << avg_runtime_seconds << " secs" << std::endl;
+
+    std::cout << "Arithmetic Intensity: " << static_cast<float>(flops) / (8 * (n + numThreads)) << std::endl;
     std::cout << "TFLOPS/sec: " << tflops / avg_runtime_seconds << std::endl;
+    std::cout << "BW [GB/sec]: " << data_moved / avg_runtime_seconds / 1e9 << std::endl;
 
     hipFree(mem_a);
 
